@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="graderStyles.css">
+	<title>Grade Calculator</title>
+</head>
+<body>
+	<div class="Title">
+		<h1>Final Exam Grade Calculator</h1>
+	</div>
+	<div class = "explanationBox">
+		<div class = "explanationHeader">
+			<p>How Does This Work</p>
+		</div>
+		<div class = "explanation">
+			<p>It's Finals Season! Every student is looking for that bare minimum that they need to get that A. Using this handy-dandy website, that calculation takes just a few seconds. Put the weightings of each category in the corresponding boxes. If that category doesn't exist in your class's grading structure leave it as a 0. Then, calculate each category's average grade and put that in each corresponding box. Then all you have to do is click calculate! If your class is in the drop down menu, the website will put in the corresponding weights for you. 
+		</div>
+	</div>
+	<div class = "InputArea">
+		<div class = "Labels">
+			<div class = "row">
+				Tests:
+			</div>
+			<div class = "row">
+				Homework:
+			</div>
+			<div class = "row">
+				Quiz:
+			</div>
+			<div class = "row">
+				Class Participation:
+			</div>
+			<div class = "row">
+				ExtraCredit:
+			</div>
+			<div class = "row">
+				Final Exam:
+			</div>
+		</div>
+		<div class ="Weights">
+			<div>
+				<p class = "title">Weights</p>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="testWeight" value = "0">
+					%
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="homeworkWeight" value = "0">
+					%
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="quizWeight" value = "0">
+					%
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="cPWeight" value = "0">
+					%
+				</form>
+			</div>
+			<div class = "row">
+				<br>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="finalWeight" value = "0">
+					%
+				</form>
+			</div>
+		</div>
+		<div class = "Grades">
+			<div>
+				<p class = "title">Average Grade</p>
+			</div>
+			<div class = "row">	
+				<form>		
+					<input type: "text" id="testgrades" value = "0">
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="hwgrades" value = "0">
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="qgrades" value = "0">
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="cPgrades" value = "0">
+				</form>
+			</div>
+			<div class = "row">
+				<form>
+					<input type: "text" id="ECgrades" value = "0">	
+				</form>			
+			</div>
+			<div class = "row">
+				<br>
+			</div>
+		</div>
+		<div class="DesiredGrade":nowrap>
+			<span>
+				Desired Final Grade:
+			</span>
+			<input type: "text" id = "desiredgrade" value = "0"> %
+		</div>
+	</div>
+	<div class = "dropdown">
+		<select id = "classname" onchange = "getAPI()">
+			<option value = "Choose a Class">Choose a Class</option>
+			<option value = "AE1350">AE1350</option>
+			<option value = "AE1601">AE1601</option>
+			<option value = "AE1770">AE1770</option>
+			<option value = "CHEM1211">CHEM1211</option>
+			<option value = "CHEM1212">CHEM1212</option>
+			<option value = "CHEM1315">CHEM1315</option>
+			<option value = "CHEM2311">CHEM2311</option>
+			<option value = "CS1331">CS1331</option>
+			<option value = "CS1332">CS1332</option>
+			<option value = "CS1371">CS1371</option>
+			<option value = "ECE1010">ECE1010</option>
+			<option value = "ECE2020">ECE2020</option>
+			<option value = "ECE2026">ECE2026</option>
+			<option value = "ECON1101">ECON1101</option>
+			<option value = "ECON2100">ECON2100</option>
+			<option value = "ECON2101">ECON2101</option>
+			<option value = "ENGL1101">ENGL1101</option>
+			<option value = "ENGL1102">ENGL1102</option>
+			<option value = "MATH1111">MATH1111</option>
+			<option value = "MATH1113">MATH1113</option>
+			<option value = "MATH1501">MATH1501</option>
+			<option value = "MATH1502">MATH1502</option>
+			<option value = "PHYS2211">PHYS2211</option>
+			<option value = "PHYS2212">PHYS2212</option>
+			<option value = "PHYS2213">PHYS2213</option>
+			<option value = "PHIL2010">PHIL2010</option>
+			<option value = "PHIL2025">PHIL2025</option>
+			<option value = "PSYC2005">PSYC2005</option>
+			<option value = "PSYC2020">PSYC2020</option>
+			<option value = "PSYC2103">PSYC2103</option>
+			<option value = "NRE2110">NRE2110</option>
+			<option value = "NRE2698">NRE2698</option>
+		</select>
+	</div>
+	<script>
+		function getAPI() {
+			var classname = document.getElementById("classname").value;
+			var  url = "http://cs1371.gatech.edu/getClassInfo/?class=" +classname;
+			fetch(url)
+			.then(function(response) {
+				return response.json();
+			}).then(function(json_object) {
+				if (json_object.success == true) {
+					document.getElementById("testWeight").value = json_object.test;
+					document.getElementById("homeworkWeight").value = json_object.homework;
+					document.getElementById("quizWeight").value = json_object.quiz;
+					document.getElementById("cPWeight").value = json_object.class_participation;
+					document.getElementById("finalWeight").value = json_object.final_exam;
+				}
+				else {
+					alert(json_object.message);
+					return false;
+				} 
+			});
+		return true;
+		}
+	</script>
+	<p id = "out"></p>
+	<div class = button>
+		<button type = "button" onclick = "gradeCalculator()">
+			Calculate My Grade!
+		</button>
+	</div>
+	<script>
+		function getSum(total,num) {
+			return total + num; 
+		}
+		function gradeCalculator() {
+			var testWeight = document.getElementById("testWeight").value;
+			var homeworkWeight = document.getElementById("homeworkWeight").value;
+			var quizWeight = document.getElementById("quizWeight").value;
+			var cPWeight = document.getElementById("cPWeight").value;
+			var finalWeight = document.getElementById("finalWeight").value;
+			var testGrade = document.getElementById("testgrades").value;
+			var hwGrade = document.getElementById("hwgrades").value;
+			var quizGrade = document.getElementById("hwgrades").value;
+			var cPGrade = document.getElementById("cPgrades").value;
+			var ECgrade = document.getElementById("ECgrades").value;
+			var desiredGrade = document.getElementById("desiredgrade").value;
+			var totalWeight = parseInt(testWeight) + parseInt(homeworkWeight) + parseInt(quizWeight) +parseInt(cPWeight) + parseInt(finalWeight);
+				if (parseInt(totalWeight) != 100) {
+					document.getElementById("out").innerHTML = "Weightings of classes do not equal 100!";
+				}
+				else {
+
+					tgRaw = parseInt(testGrade) * (testWeight/100);
+					hwRaw = parseInt(hwGrade) * (homeworkWeight/100);
+					quizRaw = parseInt(quizGrade) * (quizWeight/100);
+					cPRaw = parseInt(cPGrade) * (cPWeight/100);
+					rawPointsNeeded = parseInt(desiredGrade) - tgRaw - hwRaw - quizRaw - cPRaw - ECgrade;
+					scoreNeeded = rawPointsNeeded / (finalWeight/100);
+					document.getElementById("out").innerHTML = "You need a" + " " + scoreNeeded.toString() + " " + "on your final!";
+				}
+		}
+	</script>
+</body>
+</html>
